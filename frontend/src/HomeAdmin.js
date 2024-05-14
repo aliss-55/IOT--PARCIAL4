@@ -11,10 +11,15 @@ const HomeAdmin = () => {
   const [nodeData, setNodeData] = useState([]);
   const navigate = useNavigate();
 
-  // Función para cargar los datos del nodo seleccionado
+  // Función para cargar los datos del nodo seleccionado o todos los datos si no se selecciona ningún nodo
   const loadNodeData = async (nodeId) => {
     try {
-      const response = await axios.get(`http://localhost:3030/datos/${nodeId}`);
+      let response;
+      if (nodeId) {
+        response = await axios.get(`http://localhost:3030/datos/${nodeId}`);
+      } else {
+        response = await axios.get(`http://localhost:3030/datos`);
+      }
       setNodeData(response.data);
     } catch (error) {
       console.error("Error al cargar datos del nodo:", error);
@@ -32,6 +37,13 @@ const HomeAdmin = () => {
   const handleLogout = () => {
     navigate("/"); // Redirigir al usuario a la página de inicio de sesión
   };
+
+  useEffect(() => {
+    // Cargar todos los datos al montar el componente si no hay nodo seleccionado inicialmente
+    if (!selectedNode) {
+      loadNodeData();
+    }
+  }, []);
 
   return (
     <Container>
@@ -121,5 +133,3 @@ const ChartWrapper = styled.div`
 `;
 
 export default HomeAdmin;
-
-
