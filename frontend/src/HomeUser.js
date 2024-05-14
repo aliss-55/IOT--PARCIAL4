@@ -14,20 +14,15 @@ const HomeUser = ({ userHome }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Obtener los últimos datos de temperatura
-        const temperaturaResponse = await axios.get(`http://localhost:3030/datos/${userHome}`);
-        if (temperaturaResponse.data && temperaturaResponse.data.length > 0) {
-          const temperaturaData = temperaturaResponse.data[0];
-          setTemperatura(temperaturaData.Temperatura || 0);
-          setTemperaturaEstado(temperaturaData.Estado_Temperatura || "Desconocido");
-        }
+        const response = await axios.get(`http://localhost:3030/datos/${userHome}`);
 
-        // Obtener los últimos datos de humedad
-        const humedadResponse = await axios.get(`http://localhost:3030/datos/${userHome}`);
-        if (humedadResponse.data && humedadResponse.data.length > 0) {
-          const humedadData = humedadResponse.data[0];
-          setHumedad(humedadData.Humedad || 0);
-          setHumedadEstado(humedadData.Estado_Humedad || "Desconocido");
+        if (response.data && response.data.length > 0) {
+          const data = response.data[0];
+
+          setTemperatura(data.Temperatura || 0);
+          setTemperaturaEstado(data.Estado_Temperatura || "Desconocido");
+          setHumedad(data.Humedad || 0);
+          setHumedadEstado(data.Estado_Humedad || "Desconocido");
         }
       } catch (error) {
         console.error("Error al obtener los datos:", error);
@@ -49,34 +44,20 @@ const HomeUser = ({ userHome }) => {
       <LogoutButton onClick={handleLogout}>Cerrar sesión</LogoutButton>
       <Title>Camion # {userHome}</Title>
       <ContentWrapper>
-        <Section>
-          <InfoLabel>Temperatura:</InfoLabel>
-          <SpeedometerWrapper>
-            <ReactSpeedometer
-              maxValue={100}
-              value={temperatura}
-              needleColor="#FF5733"
-              startColor="#FF5733"
-              segments={5}
-              endColor="#FF5733"
-            />
-          </SpeedometerWrapper>
-          <InfoValue>Estado: {temperaturaEstado}</InfoValue>
-        </Section>
-        <Section>
-          <InfoLabel>Humedad:</InfoLabel>
-          <SpeedometerWrapper>
-            <ReactSpeedometer
-              maxValue={100}
-              value={humedad}
-              needleColor="#007BFF"
-              startColor="#007BFF"
-              segments={5}
-              endColor="#007BFF"
-            />
-          </SpeedometerWrapper>
-          <InfoValue>Estado: {humedadEstado}</InfoValue>
-        </Section>
+        <SensorSection>
+          <SensorInfo>
+            <InfoLabel>Temperatura</InfoLabel>
+            <InfoValue>Estado: {temperaturaEstado}</InfoValue>
+          </SensorInfo>
+          <Speedometer value={temperatura} color="#FF5733" size={250} />
+        </SensorSection>
+        <SensorSection>
+          <SensorInfo>
+            <InfoLabel>Humedad</InfoLabel>
+            <InfoValue>Estado: {humedadEstado}</InfoValue>
+          </SensorInfo>
+          <Speedometer value={humedad} color="#007BFF" size={250} />
+        </SensorSection>
       </ContentWrapper>
     </Container>
   );
@@ -85,9 +66,9 @@ const HomeUser = ({ userHome }) => {
 const Container = styled.div`
   background-color: #e6f2ff;
   padding: 20px;
-  font-family: Arial, sans-serif;
   height: 100vh;
   overflow-y: auto;
+  align-items: center;
 `;
 
 const LogoutButton = styled.button`
@@ -109,29 +90,44 @@ const Title = styled.h2`
 
 const ContentWrapper = styled.div`
   display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+`;
+
+const SensorSection = styled.div`
+  display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const Section = styled.div`
-  margin-bottom: 30px;
+const SensorInfo = styled.div`
+  margin-bottom: 10px;
 `;
 
 const InfoLabel = styled.p`
   font-weight: bold;
-  margin-bottom: 8px;
-  color: black;
+  color: #343a40;
 `;
 
 const InfoValue = styled.p`
-  font-size: 18px;
+  font-size: 16px;
+  color: #555;
 `;
 
-const SpeedometerWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
+const Speedometer = ({ value, color, size }) => (
+  <ReactSpeedometer
+    maxValue={100}
+    value={value}
+    needleColor={color}
+    startColor={color}
+    segments={5}
+    endColor={color}
+    width={size}
+    height={size * 0.6} // Ajusta la altura proporcionalmente al tamaño
+  />
+);
 
 export default HomeUser;
+
+
 
