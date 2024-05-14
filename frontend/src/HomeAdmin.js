@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import DataTable from "./DataTable";
-import Chart from "./Chart";
+import TemperatureChart from "./TemperatureChart";
+import HumidityChart from "./HumidityChart";
 
 const HomeAdmin = () => {
   const [selectedNode, setSelectedNode] = useState("");
@@ -42,14 +43,22 @@ const HomeAdmin = () => {
           <option value="">Seleccionar Nodo</option>
           <option value="1">Nodo 1</option>
           <option value="2">Nodo 2</option>
-          {}
         </select>
       </NodeSelection>
       {nodeData.length > 0 && (
-        <div>
+        <ContentWrapper>
           <DataTable nodeData={nodeData} />
-          <Chart nodeData={nodeData} />
-        </div>
+          <ChartsWrapper>
+            <ChartWrapper>
+              <h3>Gráfico de Temperatura</h3>
+              <TemperatureChart nodeData={nodeData} />
+            </ChartWrapper>
+            <ChartWrapper>
+              <h3>Gráfico de Humedad</h3>
+              <HumidityChart nodeData={nodeData} />
+            </ChartWrapper>
+          </ChartsWrapper>
+        </ContentWrapper>
       )}
     </Container>
   );
@@ -57,6 +66,8 @@ const HomeAdmin = () => {
 
 const Container = styled.div`
   padding: 20px;
+  height: 100%;
+  overflow-y: auto; /* Habilita la barra de desplazamiento vertical */
 `;
 
 const Title = styled.h2`
@@ -87,6 +98,26 @@ const LogoutButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+`;
+
+const ContentWrapper = styled.div`
+  margin-top: 20px;
+`;
+
+const ChartsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ChartWrapper = styled.div`
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+  h3 {
+    margin-bottom: 10px;
+  }
 `;
 
 export default HomeAdmin;

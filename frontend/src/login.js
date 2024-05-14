@@ -46,23 +46,28 @@ const Login = ({ setUserRole, setUserHome }) => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            p: 4,
+            border: '1px solid #ccc',
+            borderRadius: '8px',
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-          Inciar Sesión
+            Iniciar Sesión
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
+            En este sistema se monitorea la temperatura y la humedad en tiempo real para garantizar la seguridad alimentaria y la calidad de los productos durante su transporte, permitiendo visualizar el estado de estos en los camiones transportadores.
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3, width: '100%' }}>
             <TextField
               margin="normal"
               required
@@ -95,12 +100,12 @@ const Login = ({ setUserRole, setUserHome }) => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3 }}
             >
-              Inciar Sesión
+              Iniciar Sesión
             </Button>
             {error.generic && (
-              <Typography variant="body2" color="error" align="center">
+              <Typography variant="body2" color="error" align="center" sx={{ mt: 2 }}>
                 {error.generic}
               </Typography>
             )}
@@ -112,5 +117,7 @@ const Login = ({ setUserRole, setUserHome }) => {
 };
 
 export default Login;
+
+
 
 

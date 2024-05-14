@@ -2,8 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 const DataTable = ({ nodeData }) => {
+  // Filtrar y ordenar los datos para mostrar los últimos cinco registros primero
+  const sortedData = nodeData.slice().reverse().slice(0, 5); // Obtener los últimos cinco registros y revertir el orden
+
   return (
-    <Wrapper>
+    <TableWrapper>
+      <h3>Últimos cinco datos:</h3>
       <Table>
         <thead>
           <tr>
@@ -15,22 +19,22 @@ const DataTable = ({ nodeData }) => {
           </tr>
         </thead>
         <tbody>
-          {nodeData.map((dataItem, index) => (
+          {sortedData.map((data, index) => (
             <tr key={index}>
-              <td>{new Date(dataItem.Fecha_Hora).toLocaleString()}</td>
-              <td>{dataItem.Temperatura}</td>
-              <td>{dataItem.Estado_Temperatura}</td>
-              <td>{dataItem.Humedad}</td>
-              <td>{dataItem.Estado_Humedad}</td>
+              <td>{data.Fecha_Hora}</td>
+              <td>{data.Temperatura}</td>
+              <td>{data.Estado_Temperatura}</td>
+              <td>{data.Humedad}</td>
+              <td>{data.Estado_Humedad}</td>
             </tr>
           ))}
         </tbody>
       </Table>
-    </Wrapper>
+    </TableWrapper>
   );
 };
 
-const Wrapper = styled.div`
+const TableWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
@@ -40,10 +44,16 @@ const Table = styled.table`
 
   th,
   td {
-    padding: 8px;
     border: 1px solid #ddd;
+    padding: 8px;
     text-align: center;
+  }
+
+  th {
+    background-color: #f5f5f5;
+    font-weight: bold;
   }
 `;
 
 export default DataTable;
+
